@@ -1,0 +1,416 @@
+/*
+ * @file style.css
+ */
+
+:root {
+    /* Obsidian標準のカラーテーマ */
+    --obsidian-r: 127;
+    --obsidian-g: 109;
+    --obsidian-b: 242;
+    --obsidian-accent-rgb: var(--obsidian-r), var(--obsidian-g), var(--obsidian-b);
+    --obsidian-accent: rgb(var(--obsidian-accent-rgb));
+
+    /* テーマカラー */
+    --theme-r: var(--obsidian-r);
+    --theme-g: var(--obsidian-g);
+    --theme-b: var(--obsidian-b);
+    --theme-accent-rgb: var(--theme-r), var(--theme-g), var(--theme-b);
+    --theme-accent: rgb(var(--theme-accent-rgb));
+
+    --color-header-text: color-mix(in srgb, var(--theme-accent), black 50%);
+    --color-callout-inline-start-mix: black 25%;
+    --color-callout-background-mix:   white 85%;
+    --color-callout-message-mix:      black 45%;
+    --color-callout-note:     rgb(var(--bulma-info-rgb));
+    --color-callout-abstract: rgb(var(--bulma-primary-rgb));
+    --color-callout-info:     rgb(var(--bulma-info-rgb));
+    --color-callout-todo:     rgb(var(--bulma-info-rgb));
+    --color-callout-tip:      rgb(var(--bulma-link-rgb));
+    --color-callout-success:  rgb(var(--bulma-success-rgb));
+    --color-callout-question: rgb(var(--bulma-warning-rgb));
+    --color-callout-warning:  rgb(var(--bulma-warning-rgb));
+    --color-callout-failure:  rgb(var(--bulma-danger-rgb));
+    --color-callout-danger:   rgb(var(--bulma-danger-rgb));
+    --color-callout-bug:      color-mix(in srgb, rgb(var(--bulma-success-rgb)), rgb(var(--bulma-link-rgb)) 25%);
+    --color-callout-example:  rgb(var(--bulma-link-rgb));
+    --color-callout-quote:    color-mix(in srgb, rgb(var(--bulma-dark-rgb)), white 55%);
+
+    --font-family-default: 'Meiryo', 'HiraKakuProN-W3', 'VL Gothic', sans-serif;
+    --font-family-default-h3: 'Hiragino Maru Gothic ProN', 'HGMaruGothicMPRO', 'Noto Sans JP', 'Meiryo UI', 'Meiryo', sans-serif;
+    --font-family-fontawesome: 'FontAwesome';
+    --font-family-fontawesome-free: 'Font Awesome 7 Free';
+    --font-family-code: 'Fira Code', monospace;
+
+    --font-size-default: 16px;
+    --font-size-h1: 1.70em;
+    --font-size-h2: 1.50em;
+    --font-size-h3: 1.10em;
+    --font-size-h4: 1.00em;
+    --font-size-h5: 1.00em;
+    --font-size-h6: 1.00em;
+    --font-size-h7: 1.00em;
+}
+
+html {
+    font-size: var(--font-size-default);
+}
+
+body {
+    font-family: var(--font-family-default);
+
+    & :is(h1, h2, h3, h4, h5, h6, h7) {
+        color: var(--color-header-text) !important;
+    }
+
+    & h1 {
+        border-left: 12px solid color-mix(in srgb, var(--theme-accent), black 25%);
+        font-size: var(--font-size-h1) !important;
+        padding-left: 0.2em;
+    }
+
+    & h2 {
+        border-bottom: 2px solid color-mix(in srgb, var(--theme-accent), black 25%);
+        font-size: var(--font-size-h2) !important;
+    }
+
+    & h3 {
+        border-bottom: 1px solid color-mix(in srgb, var(--theme-accent), black 25%);
+        font-family: var(--font-family-default-h3);
+        font-size: var(--font-size-h3) !important;
+    }
+
+    & h3::before {
+        content: '#';
+        font-family: var(--font-family-code);
+        margin-right: 0.2em;
+    }
+
+    & h4 {
+        font-family: var(--font-family-default-h3);
+        font-size: var(--font-size-h4) !important;
+    }
+
+    & h4::before {
+        content: '|>';
+        font-family: var(--font-family-code);
+        margin-right: 0.2em;
+    }
+
+    /* <h5>以降はほぼ使わないのでスタイルを指定しない */
+    & h5 { font-size: var(--font-size-h5) !important; }
+    & h6 { font-size: var(--font-size-h6) !important; }
+    & h7 { font-size: var(--font-size-h7) !important; }
+
+    & p {
+        /* <p>タグ内での改行は書いた通りに反映させる */
+        white-space: pre-wrap;
+    }
+
+    /* 引用の上下のマージン調整 + 引用内のテキストを自動改行 */
+    & blockquote {
+        padding-top: 10px !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        padding-bottom: 10px !important;
+
+        & p {
+            white-space: pre-wrap;
+        }
+
+        &:is([data-callout]) {
+            & div[data-callout="title"] {
+                font-weight: bold;
+
+                &::before {
+                    font-family: var(--font-family-fontawesome);
+                    margin-right: 0.2em;
+                }
+            }
+        }
+
+        &:is([data-callout="note"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-note), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-note), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-note), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f249';
+                font-family: var(--font-family-fontawesome-free) !important;
+                font-weight: 400;
+            }
+        }
+
+        &:is([data-callout="abstract"], [data-callout="summary"], [data-callout="tldr"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-abstract), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-abstract), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-abstract), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f0cb';
+            }
+        }
+
+        &:is([data-callout="info"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-info), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-info), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-info), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f4ad';
+                font-family: var(--font-family-fontawesome-free) !important;
+                font-weight: 400;
+            }
+        }
+
+        &:is([data-callout="todo"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-todo), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-todo), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-todo), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f274';
+            }
+        }
+
+        &:is([data-callout="tip"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-tip), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-tip), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-tip), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f0eb';
+            }
+        }
+
+        &:is([data-callout="success"], [data-callout="check"], [data-callout="done"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-success), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-success), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-success), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f00c';
+            }
+        }
+
+        &:is([data-callout="question"], [data-callout="help"], [data-callout="faq"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-question), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-question), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-question), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f059';
+                font-family: var(--font-family-fontawesome-free) !important;
+                font-weight: 400;
+            }
+        }
+
+        &:is([data-callout="warning"], [data-callout="caution"], [data-callout="attention"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-warning), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-warning), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-warning), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f071';
+            }
+        }
+
+        &:is([data-callout="failure"], [data-callout="fail"], [data-callout="missing"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-failure), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-failure), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-failure), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f071';
+            }
+        }
+
+        &:is([data-callout="danger"], [data-callout="error"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-danger), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-danger), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-danger), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f714';
+            }
+        }
+
+        &:is([data-callout="bug"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-bug), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-bug), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-bug), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f188';
+            }
+        }
+
+        &:is([data-callout="example"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-example), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-example), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-example), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f03a';
+            }
+        }
+
+        &:is([data-callout="quote"]) {
+            border-inline-start-color: color-mix(in srgb, var(--color-callout-quote), var(--color-callout-inline-start-mix));
+            background-color: color-mix(in srgb, var(--color-callout-quote), var(--color-callout-background-mix));
+            color: color-mix(in srgb, var(--color-callout-quote), var(--color-callout-message-mix));
+
+            & div[data-callout="title"]::before {
+                content: '\f10e';
+            }
+        }
+    }
+
+    & table {
+        & tr {
+            /* テーブルのヘッダ行は折り返さない */
+            & th {
+                white-space: nowrap;
+            }
+        }
+    }
+
+    /* ユーティリティ・タイポグラフィ */
+    & .w-100      { width: 100% !important; }
+    & .is-nowrap  { white-space: nowrap !important; }
+    & .is-prewrap { white-space: pre-wrap !important; }
+
+    & [data-prefix]::before { content: attr(data-prefix); }
+    & [data-suffix]::after { content: attr(data-suffix); }
+
+    /* 印刷用定義: 余白を削除 */
+    & .section {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+
+        /* 96dpi = 96 / 25.4 * 210mm (A4用紙サイズ */
+        margin-left: auto;
+        margin-right: auto;
+        max-width: calc(96 / 25.4 * 210px);
+    }
+
+    /* 印刷用定義: HTML表示した際の改ページ表示 */
+    & .page-break > * {
+        color: var(--bulma-grey);
+        font-size: var(--bulma-size-7);
+    }
+
+    /* 第2レベル以降のリストの余白を修正 */
+    & .content :is(ul, ol) {
+        margin-top: 0.25em !important;
+
+        & li::marker {
+            color: var(--color-header-text) !important;
+        }
+    }
+
+    /* Markdownのページごとに改ページするための設定 */
+    & .page-break {
+        break-after: page;
+    }
+
+    /* 能力値の色 */
+    & [data-type="attribute"] {
+        color: color-mix(in srgb, var(--bulma-danger), var(--bulma-link) 25%) !important;
+    }
+
+    /* ダイスロールの色 */
+    & [data-type="dice"] {
+        color: var(--bulma-danger) !important;
+    }
+
+    /* アイテムのスタイル */
+    & [data-type="item"] {
+        color: color-mix(in srgb, var(--bulma-info), black 25%);
+        font-weight: bold;
+        margin-left: -0.2em;
+        margin-right: -0.2em;
+    }
+
+    /* 正気度判定のダイスロール色 */
+    & [data-type="sanity"] {
+        color: var(--bulma-success) !important;
+    }
+
+    /* 正気度判定成功時のダイスロール色 */
+    & [data-type="sanity-success"] {
+        color: var(--bulma-success) !important;
+    }
+
+    /* 正気度判定失敗時のダイスロール色 */
+    & [data-type="sanity-failure"] {
+        color: var(--bulma-danger) !important;
+    }
+
+    /* スキルのスタイル */
+    & [data-type="skill"] {
+        color: color-mix(in srgb, var(--bulma-warning), black 25%);
+        font-weight: bold;
+        margin-left: -0.2em;
+        margin-right: -0.2em;
+    }
+
+    /* ココフォリア用チャットパレットの色 */
+    & pre[data-lang="ccfolia"] {
+        cursor: pointer;
+        padding-top: 2em;
+        padding-bottom: 0.4em;
+        position: relative;
+
+        @media print {
+            code {
+                white-space: wrap;
+            }
+        }
+
+        label {
+            color: var(--bulma-grey);
+            cursor: pointer;
+            font-size: var(--bulma-size-7);
+            margin: 0.4em;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    /* 数式が文に対して中央揃えになるように指定 */
+    mjx-math {
+        vertical-align: middle !important;
+    }
+}
+
+/* 印刷用定義: 印刷時に不要な要素を削除する */
+@media print {
+    .page-break > * {
+        display: none;
+    }
+
+    .section {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: none !important;
+    }
+}
+
+@page :left {
+    @bottom-right {
+        content: counter(page);
+        font-size: var(--bulma-size-7);
+        font-family: 'Palatino', 'Palatino Linotype', 'Georgia', serif;
+    }
+}
+
+@page :right {
+    @bottom-right {
+        content: counter(page);
+        font-size: var(--bulma-size-7);
+        font-family: 'Palatino', 'Palatino Linotype', 'Georgia', serif;
+    }
+}
