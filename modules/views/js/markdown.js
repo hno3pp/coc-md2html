@@ -78,7 +78,7 @@
             if (match) {
                 const kind = match[1]
                 const [first, ...rest] = token.text.split(/\r?\n/)
-                const title = first.split(' ').slice(1).join(' ')
+                const title = first.split(/\s+/).slice(1).join(' ')
                 const message = rest.join('\n')
                 return document.createWith('blockquote', {
                     dataset: { callout: kind },
@@ -332,10 +332,33 @@
                 return index >= 0 ? path.slice(index + 1) : path
             }
 
-            return document.createWith('img', {
-                attributes: { src: `output/${basename(token.name)}` },
+            function isScaleToFit(token) {
+                const src = basename(token.name)
+                return /-100\.(gif|jpe?g|png)$/.test(src)
+            }
+
+            function isConstSize(token) {
+                const src = basename(token.name)
+                const match = src.match(/-([0-9]+)x([0-9]+)\.(gif|jpe?g|png)$/)
+                if (match) {
+                    return [+match[1], +match[2]]
+                }
+                return [null, null]
+            }
+
+            const element = document.createWith('img', {
+                attributes: { src: basename(token.name) },
                 dataset: { 'image': 'inline' }
-            }).outerHTML
+            })
+            const [width, height] = isConstSize(token);
+            if (width != null && height != null) {
+                element.style.width = `${width}px`
+                element.style.height = `${height}px`
+            } else if (isScaleToFit(token)) {
+                element.style.width = `100%`
+                element.style.height = `100%`
+            }
+            return element.outerHTML
         }
     }
 
