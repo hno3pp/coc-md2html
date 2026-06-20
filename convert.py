@@ -62,7 +62,7 @@ def handle_build(args: argparse.Namespace) -> None:
         .set_template(Template.from_path("modules/views/html/template.html"))
         .build(files)
     )
-    with open(os.path.join(output_dir, "output.html"), "w") as file:
+    with open(os.path.join(output_dir, "output.html"), "w", encoding="utf-8") as file:
         file.write(html)
         logger.info("MarkdownをHTMLに変換しました")
     server = http.server.ThreadingHTTPServer(
@@ -118,7 +118,7 @@ def get_markdown_files(target: str) -> list[NamedMarkdown]:
         for filename in filenames:
             if filename.endswith(".md"):
                 file = os.path.join(dirpath, filename)
-                with open(file) as fp:
+                with open(file, encoding='utf-8') as fp:
                     files.append(NamedMarkdown.parse_named(filename, fp.read()))
     return files
 

@@ -68,6 +68,7 @@
     */
     async function onImageLoad(e) {
         const image = e.currentTarget
+        if (image.style.width) return
         image.width /= 2
         image.height /= 2
     }
@@ -381,9 +382,18 @@
             }
         },
         renderer(token) {
+            // Obsidianではパス付きリンクが入るため、アンカー生成用に
+            // ファイル名のみを取り出して正規化する
+            const normalizedLink = token.link
+                .replace(/\\/g, '/')
+                .split('/')
+                .pop()
+                .replace(/\.md$/i, '')
+                .normalize('NFC')
+
             const a = document.createElement('a')
             a.innerText = token.label ?? token.link
-            a.href = `#${token.link.toHex()}`
+            a.href = `#${normalizedLink.toHex()}`
             return a.outerHTML
         }
     }
@@ -417,11 +427,40 @@
         }
     }
 
+    const highlight = {
+        name: 'highlight',
+        level: 'inline',
+        start(src) {
+            return src.match(/\{/)?.index
+        },
+        tokenizer(src, tokens) {
+            const rule = /^\{(.*?)\}/;
+            const match = rule.exec(src);
+            if (match) {
+                const token = {
+                    type: 'highlight',
+                    raw: match[0],
+                    text: match[1],
+                    tokens: []
+                }
+                this.lexer.inlineTokens(token.text, token.tokens)
+                return token
+            }
+        },
+        renderer(token) {
+            return document.createWith('span', {
+                dataset: { type: 'highlight' },
+                html: `{${this.parser.parseInline(token.tokens)}}`
+            }).outerHTML
+        }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         marked.use({ renderer })
         marked.use({ extensions: [
             attribute,
             dice,
+            highlight,
             image,
             inlineFormula,
             item,

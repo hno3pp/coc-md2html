@@ -18,7 +18,7 @@ class Template:
 
     @classmethod
     def from_path(cls, path: str) -> Self:
-        with open(path) as file:
+        with open(path, encoding="utf-8") as file:
             return cls.from_file(file)
 
 
@@ -42,6 +42,7 @@ class PageBuilder:
         if self.template is None:
             raise RuntimeError("テンプレートファイルが指定されていません")
         content = self.template.content.replace("<!-- MD -->", self._build_pages(files))
+        content = content.replace("<!-- TITLE -->", f"「{self.title}」")
         # 既定のスタイルシートを追加する
         content = content.replace(
             "<!-- STYLE -->",
