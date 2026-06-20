@@ -417,11 +417,40 @@
         }
     }
 
+    const highlight = {
+        name: 'highlight',
+        level: 'inline',
+        start(src) {
+            return src.match(/\{/)?.index
+        },
+        tokenizer(src, tokens) {
+            const rule = /^\{(.*?)\}/;
+            const match = rule.exec(src);
+            if (match) {
+                const token = {
+                    type: 'highlight',
+                    raw: match[0],
+                    text: match[1],
+                    tokens: []
+                }
+                this.lexer.inlineTokens(token.text, token.tokens)
+                return token
+            }
+        },
+        renderer(token) {
+            return document.createWith('span', {
+                dataset: { type: 'highlight' },
+                html: `{${this.parser.parseInline(token.tokens)}}`
+            }).outerHTML
+        }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         marked.use({ renderer })
         marked.use({ extensions: [
             attribute,
             dice,
+            highlight,
             image,
             inlineFormula,
             item,
