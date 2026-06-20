@@ -68,6 +68,7 @@
     */
     async function onImageLoad(e) {
         const image = e.currentTarget
+        if (image.style.width) return
         image.width /= 2
         image.height /= 2
     }
@@ -381,9 +382,18 @@
             }
         },
         renderer(token) {
+            // Obsidianではパス付きリンクが入るため、アンカー生成用に
+            // ファイル名のみを取り出して正規化する
+            const normalizedLink = token.link
+                .replace(/\\/g, '/')
+                .split('/')
+                .pop()
+                .replace(/\.md$/i, '')
+                .normalize('NFC')
+
             const a = document.createElement('a')
             a.innerText = token.label ?? token.link
-            a.href = `#${token.link.toHex()}`
+            a.href = `#${normalizedLink.toHex()}`
             return a.outerHTML
         }
     }
